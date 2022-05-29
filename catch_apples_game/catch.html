@@ -1,0 +1,52 @@
+<html>
+  <div style='background-color: lightblue; width: 640px;'>
+    <canvas id="gameCanvas" width="640" height="480"></canvas>
+  </div>
+  <div style='display: block';>
+    <img id='apple' src='https://maxw.com/apple.png'>
+    <img id ='monster' src='https://maxw.com/monster3.png'>
+  </div>
+  <script>
+    var ctx = gameCanvas.getContext("2d");
+    var x = 300, y = 50, monsterX = 300, changeX = 0, score = 0;
+    var gameTimer = setInterval(mainLoop, 20);
+
+    function mainLoop() {
+      ctx.clearRect(0,0,640,480);
+      ctx.font = '30px Arial';
+      ctx.fillText('Score: ' + score, 10, 30);
+      ctx.drawImage(apple, x, y, 80, 80);
+      // move the apple down
+      y+=3;
+      // has the apple hit the bottom
+      if(y > 480) {
+        y = -80;
+        x = Math.random()*600;
+      }
+      ctx.drawImage(monster, monsterX, 400, 80, 80);
+      monsterX += changeX;
+      
+      checkForHits();
+    }
+
+    document.onkeydown = keyPressed;
+
+    function keyPressed(e) {
+      var k = e.keyCode;
+
+      if (k == 37) { changeX = -4; }
+      if (k == 39) { changeX = 4; }
+    }
+
+    function checkForHits() {
+      console.log('tick')
+      if ((Math.abs(400-y) < 60) &&
+          (Math.abs(monsterX - x) < 60)) {
+            score += 1;
+            // move the apple to a random position near the top
+            y = -80;
+            x = Math.random() * 600;
+          }
+    }
+  </script>
+</html>

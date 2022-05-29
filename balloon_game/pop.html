@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<h1 id='scoreBox'></h1>
+<style>
+  #balloon{
+    position: absolute;
+    -webkit-transition:all 0.2s;
+    height:500px;
+  }
+</style>
+<!-- <img id='balloon' src='https://maxw.com/b1.png'> -->
+<img id='balloon' src='https://cdn10.bigcommerce.com/s-o0d6ce9f7h/products/6352/images/7038/2877701__94587.1536858971.386.513.jpg?c=2'>
+<script>
+  balloon.addEventListener('click', clickedIt);
+  var score=0, count=0;
+
+  function clickedIt(){
+    score++;
+    scoreBox.innerHtml='score: ' +score;
+    balloon.style.height='1px';
+  }
+
+  function moveIt(){
+    balloon.style.height='160px';
+    balloon.style.left=Math.random()*800+'px';
+    balloon.style.top=Math.random()*600+'px';
+    count++;
+    if (count==20){
+      alert('game over');
+      clearInterval(timer);
+    }
+  }
+  var timer=setInterval(moveIt, 2000);
+</script>
+</html>
