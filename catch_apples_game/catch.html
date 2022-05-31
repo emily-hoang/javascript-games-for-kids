@@ -18,20 +18,28 @@
       ctx.drawImage(apple, x, y, 80, 80);
       // move the apple down
       y+=3;
-      // has the apple hit the bottom
-      if(y > 480) {
-        y = -80;
-        x = Math.random()*600;
-      }
+      resetApplePosition();
       ctx.drawImage(monster, monsterX, 400, 80, 80);
-      monsterX += changeX;
+      moveMonster();
       
       checkForHits();
     }
 
-    document.onkeydown = keyPressed;
+    function moveMonster() {
+      monsterX += changeX;
+    }
 
-    function keyPressed(e) {
+    function resetApplePosition() {
+      // has the object hit the bottom
+      if(y > 480) {
+        y = -80;
+        x = Math.random()*600;
+      }
+    }
+
+    document.onkeydown = detectKeyPresses;
+
+    function detectKeyPresses(e) {
       var k = e.keyCode;
 
       if (k == 37) { changeX = -4; }
@@ -43,10 +51,14 @@
       if ((Math.abs(400-y) < 60) &&
           (Math.abs(monsterX - x) < 60)) {
             score += 1;
-            // move the apple to a random position near the top
-            y = -80;
-            x = Math.random() * 600;
+            resetApplePositionAfterHit();
           }
+    }
+
+    function resetApplePositionAfterHit() {
+      // move the apple to a random position near the top
+      y = -80;
+      x = Math.random() * 600;
     }
   </script>
 </html>
