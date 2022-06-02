@@ -1,0 +1,64 @@
+<html>
+<style>
+  div {
+    width: 640px;
+    height: 480px;
+    background: url('sea.png');
+  }
+  img {
+    display: none;
+  }
+</style>
+<div>
+  <canvas id = 'gameCanvas' width = '640' height = '480'></canvas>
+</div>
+<img id = 'fish' src='fish.png'>
+<img id = 'pipes' src='pipes.png'>
+<script>
+  var ctx = gameCanvas.getContext('2d');
+  var x = 640, y = -160, fishY = 220, ySpeed = 0, score = 0;
+
+  var gameTimer = setInterval(startGame, 10);
+  document.onkeydown = function() {
+    ySpeed =-2;
+  }
+
+  function startGame() {
+    setUpCanvas();
+    ctx.drawImage(pipes, x, y, 80, 800);
+    // move pipe to the left
+    x += -2;
+    checkHitPipe();
+    movePipeToTheRight();
+    ctx.drawImage(fish, 10, fishY, 80, 80);
+    // increase how fast the fish falls
+    ySpeed += 0.02;
+    // move the fish down according to how fast it's falling
+    fishY += ySpeed;
+  }
+
+  function setUpCanvas() {
+    ctx.clearRect(0, 0, 640, 480);
+    ctx.font = '30px Arial';
+    ctx.fillText("Score: " + score, 10, 30);
+  };
+
+  function checkHitPipe() {
+    if (x < 70) {
+      if ((fishY - y < 270) || (fishY - y > 450)) {
+        clearInterval(gameTimer);
+        ctx.font = "80px Arial";
+        ctx.fillText("Game over!", 100, 250);
+      }
+    }
+  }
+
+  function movePipeToTheRight() {
+    if (x < -80) {
+      x = 640;
+      y = Math.random() * -320;
+      score++;
+    };
+  }
+</script>
+</html>
