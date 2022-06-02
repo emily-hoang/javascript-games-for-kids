@@ -9,32 +9,31 @@
   <script>
     var ctx = gameCanvas.getContext("2d");
     var x = 300, y = 50, monsterX = 300, changeX = 0, score = 0;
-    var gameTimer = setInterval(mainLoop, 20);
+    var gameTimer = setInterval(startLoop, 20);
 
-    function mainLoop() {
-      ctx.clearRect(0,0,640,480);
-      ctx.font = '30px Arial';
-      ctx.fillText('Score: ' + score, 10, 30);
+    function startLoop() {
+      setUpCanvas();
       ctx.drawImage(apple, x, y, 80, 80);
       // move the apple down
       y+=3;
-      resetApplePosition();
+
+      if(y > 480) {
+        resetApplePosition();
+      };
+      
       ctx.drawImage(monster, monsterX, 400, 80, 80);
       moveMonster();
-      
       checkForHits();
+    }
+
+    function setUpCanvas() {
+      ctx.clearRect(0,0,640,480);
+      ctx.font = '30px Arial';
+      ctx.fillText('Score: ' + score, 10, 30);
     }
 
     function moveMonster() {
       monsterX += changeX;
-    }
-
-    function resetApplePosition() {
-      // has the object hit the bottom
-      if(y > 480) {
-        y = -80;
-        x = Math.random()*600;
-      }
     }
 
     document.onkeydown = detectKeyPresses;
@@ -51,11 +50,11 @@
       if ((Math.abs(400-y) < 60) &&
           (Math.abs(monsterX - x) < 60)) {
             score += 1;
-            resetApplePositionAfterHit();
+            resetApplePosition();
           }
     }
 
-    function resetApplePositionAfterHit() {
+    function resetApplePosition() {
       // move the apple to a random position near the top
       y = -80;
       x = Math.random() * 600;
