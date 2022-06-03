@@ -1,0 +1,86 @@
+<html>
+<style>
+  div {
+    width: 640px;
+    height: 480px;
+    background: url('stars.png');
+  }
+  img { 
+    display: none;
+  }
+</style>
+<div>
+  <canvas id='gameCanvas' width='640px' height='480px'></canvas>
+</div>
+<img id='rocket' src='rocket.png'>
+<img id='meteor' src='meteor.png'>
+<script>
+  var ctx = gameCanvas.getContext('2d');
+  var x = [600, 600, 600, 600, 600];
+  var y = [0, 100, 200, 300, 400];
+  var meteorSpeed = [-1, -2, -0.5, -1.2, -1.8];
+  var rocketY = 200, changeY = 0;
+  var score = 0;
+  var canvasWidth = 640, canvasHeight = 480;
+
+  var gameTimer = setInterval(startGame, 20);
+  console.log(gameTimer);
+  document.onkeydown = calculateRocketMovement;
+
+  function startGame() {
+    setUpCanvas();
+    moveMeteors();
+    moveRocket();
+  }
+
+  function setUpCanvas() {
+    ctx.clearRect(0, 0, 640, 480);
+    ctx.font = '30px Arial';
+    ctx.fillStyle = "white";
+    ctx.fillText('Score: ' + score, 10, 30);
+  }
+
+  function moveMeteors() {
+    for(var index = 0; index < 5; index++) {
+      ctx.drawImage(meteor, x[index], y[index], 80, 80);
+      x[index] += meteorSpeed[index];
+      checkForHits(index);
+      if (x[index] < -80) {
+        x[index] = canvasWidth;
+        y[index] = Math.random() * 400;
+      }
+    }
+  }
+
+  function moveRocket() {
+    ctx.drawImage(rocket, 0, rocketY, 80, 80);
+    var rocketPosition = rocketY + changeY;
+    if (rocketPosition > 0 && rocketPosition < canvasHeight - 80) {
+      rocketY += changeY;
+    }
+    score += 1;
+    if ((rocketY < 0) || (rocketY > 400)) {
+      changeY = 0;
+    }
+  }
+
+  function calculateRocketMovement(e) {
+    var key = e.keyCode;
+
+    if (key == 38) {changeY = -3};
+    if (key == 40) {changeY = 3};
+  }
+
+  function checkForHits(index) {
+    if (Math.abs(x[index] < 50) &&
+      Math.abs(rocketY - y[index] < 50)) {
+        clearInterval(gameTimer);
+        ctx.font = '80px Arial';
+        ctx.fillStyle = "white";
+        ctx.fillText('Game over!', 100, 250);
+    }
+  }
+
+
+</script>
+</html>
