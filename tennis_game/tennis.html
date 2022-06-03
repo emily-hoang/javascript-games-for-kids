@@ -1,0 +1,62 @@
+<html>
+<style>
+  #board{
+    position: absolute;
+    width: 550px;
+    height: 450px;
+    background-color: lightpink;
+  }
+  #bat{
+    position: absolute;
+    top: 420px;
+    width: 80px;
+    height: 20px;
+    background-color: red;
+  }
+  #ball{
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    border-radius: 24px;
+    background-color: blue;
+  }
+</style>
+<body onmousemove="moveBat(event)">
+  <div id='board'></div>
+  <div id='bat'></div>
+  <div id='ball'></div>
+</body>
+<script>
+  var x = 100, y = 100, speedX = 2, speedY = 2, batX = 0;
+
+  function moveBat(event) {
+    batX = event.clientX;
+    bat.style.left = batX+'px';
+  }
+
+  function moveBall() {
+    x = x + speedX;
+    y = y + speedY;
+    ball.style.left = x + 'px';
+    ball.style.top = y + 'px';
+
+    bounceBall();
+    stopGame();
+  }
+
+  function bounceBall() {
+    if (x > 530) speedX = -2;
+    if (x < 0) speedX = 2;
+    if (y < 0) speedY = 2;
+    if ((y > 372 ) && (Math.abs(batX - x) < 60)) { speedY = -2; }
+  }
+
+  function stopGame() {
+    if (y > 450) {
+      alert('game over!');
+      clearInterval(timer);
+    }
+  }
+  var timer = setInterval(moveBall, 10);
+</script>
+</html>
