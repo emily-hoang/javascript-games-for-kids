@@ -16,7 +16,11 @@
 <img id = 'pipes' src='pipes.png'>
 <script>
   var ctx = gameCanvas.getContext('2d');
-  var x = 640, y = -160, fishY = 220, ySpeed = 0, score = 0;
+  var canvasWidth = 640, canvasHeight = 480;
+  var x = canvasWidth, y = -160; 
+  var fishY = 220, fishWidth = 80;
+  var ySpeed = 0;
+  var score = 0;
 
   var gameTimer = setInterval(startGame, 10);
   document.onkeydown = function() {
@@ -30,15 +34,18 @@
     x += -2;
     checkHitPipe();
     movePipeToTheRight();
-    ctx.drawImage(fish, 10, fishY, 80, 80);
+    ctx.drawImage(fish, 10, fishY, fishWidth, 80);
     // increase how fast the fish falls
     ySpeed += 0.02;
-    // move the fish down according to how fast it's falling
-    fishY += ySpeed;
+    var fishPosition = fishY + ySpeed;
+    if (fishPosition > 0 && fishPosition < canvasHeight - fishWidth) {
+      // move the fish down according to how fast it's falling
+      fishY += ySpeed;
+    }
   }
 
   function setUpCanvas() {
-    ctx.clearRect(0, 0, 640, 480);
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     ctx.font = '30px Arial';
     ctx.fillText("Score: " + score, 10, 30);
   };
@@ -55,7 +62,7 @@
 
   function movePipeToTheRight() {
     if (x < -80) {
-      x = 640;
+      x = canvasWidth;
       y = Math.random() * -320;
       score++;
     };
