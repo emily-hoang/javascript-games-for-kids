@@ -1,0 +1,65 @@
+<html>
+<div style='background-color:blue; height:480px; width:640px;'>
+  <canvas id='gameCanvas' width='640' height='480'></canvas>
+</div>
+<script>
+  var ctx = gameCanvas.getContext('2d');
+  var x = 240, y = 180;
+  var direction = 90;
+  var score = 0;
+ 
+  drawBackground();
+
+  function drawBackground() {
+    ctx.strokeStyle = 'orange';
+    ctx.lineWidth = 40;
+    ctx.strokeRect (0, 0, 640, 480);
+  }
+
+  var gameTimer = setInterval(startGame, 50);
+
+  function startGame() {
+    ctx.fillStyle = 'orange';
+    ctx.fillRect(x, y, 9, 9);
+    changeSnakeDirection();
+    determineGameStatus();
+    score++;
+    ctx.fillRect(0, 0, 100, 20);
+    setScoreText();
+  }
+
+  function changeSnakeDirection() {
+    if (direction == 90) {x += 10;}
+    if (direction == 180) {y += 10;}
+    if (direction == -90) {x -= 10;}
+    if (direction = 0) {y -= 10;}
+  }
+
+  function determineGameStatus(){
+    var colour = ctx.getImageData(x, y, 1, 1).data;
+
+    if (colour[3] != 0) {
+      clearInterval(gameTimer);
+      ctx.font = "80px Arial";
+      ctx.fillText("Game Over!", 100, 250);
+    }
+  }
+
+  function setScoreText() {
+    ctx.fillStyle = 'black';
+    ctx.font = '20px Arial';
+    ctx.fillText('Score: ' + score, 2, 16);
+  }
+
+  document.onkeydown = handleKey;
+
+  function handleKey(e) {
+    var key = e.keyCode;
+
+    if (key == 38) {direction = 0;}
+    if (key == 39) {direction = 90;}
+    if (key == 40) {direction = 180;}
+    if (key == 37) {direction = -90;}
+  }            
+</script>
+</html>
